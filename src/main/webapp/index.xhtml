@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:th="http://thymeleaf.org"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<title>Monitoramento</title>
+	<link rel="stylesheet"
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		crossorigin="anonymous" />
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous">
+	</script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous">
+	</script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous">
+	 </script>
+</h:head>
+
+
+<body>
+
+	<!-- NAVBAR DO SISTEMA -->
+
+	<div class="container">
+		<div class="Small shadow p-3 mb-5 bg-light rounded">
+			<nav class="navbar navbar-light bg-light "> <img
+				src="/imagem/ebix.jpg" class="rounded-circle" alt="Cinque Terre" />
+			<h1 class="navbar-brand text-primary">Monitoramente de URl</h1>
+			<form class="form-inline">
+				<button class="btn btn-outline-danger my-2 my-sm-0" type="submit"
+					style="margin-right: 20px;"
+					onclick="return window.confirm('Deseja Atualizar?')">Atualizar</button>
+			</form>
+			</nav>
+		</div>
+	</div>
+
+	<!-- FECHA O NAVBAR DO SISTEMA -->
+
+	<h:form id="frmEvento">
+		<!-- COLLAPSING -->
+		<div class="container">
+
+			<!-- COLOQUE AQUI O FORM DE CADASTRO -->
+
+			<div class="shadow-lg p-3 mb-5 bg-white rounded">
+				<div class="shadow-none p-3 mb-5 bg-light rounded">
+					<p class="text-success text-center text-wrap">Cadastro de
+						Evento</p>
+				</div>
+
+				<div class="form-group ">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon3">Evento:</span>
+					</div>
+
+					<h:inputText value="#{eventoController.evento.nmEvento}"
+						class="form-control">
+						<f:passThroughAttribute name="placeholder"
+							value="Alarme - Nome do Alarme" />
+					</h:inputText>
+				</div>
+
+				<div class="form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon3">URL:</span>
+					</div>
+
+					<h:inputText value="#{eventoController.evento.url}"
+						class="form-control">
+						<f:passThroughAttribute name="placeholder"
+							value="https://exemplo.com" />
+					</h:inputText>
+				</div>
+
+				<div class="form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text " id="basic-addon3">Email:</span>
+					</div>
+
+					<h:inputText value="#{eventoController.evento.nmEmail}"
+						type="email" class="form-control">
+						<f:passThroughAttribute name="placeholder"
+							value="nome@email.com.br" />
+					</h:inputText>
+				</div>
+
+				<div class="form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text " id="basic-addon3">Tipo:</span>
+					</div>
+					<h:panelGrid columns="1" style="margin-bottom:15px" cellpadding="5">
+						<p:selectOneRadio id="console"
+							value="#{eventoController.evento.tipo}"
+							style="vertical-align: middle;" unselectable="true">
+							<f:selectItem itemValue="PROD" itemLabel="Producao" />
+							<f:selectItem itemValue="DEV" itemLabel="Desenvolvimento" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+
+					<!-- <h:selectOneMenu value="#{eventoController.evento.tipo}">
+						<f:selectItem itemValue="NULL" itemLabel="Selecione..." />
+						<f:selectItem itemValue="PROD" itemLabel="PROD" />
+						<f:selectItem itemValue="DEV" itemLabel="DEV " />
+					</h:selectOneMenu> -->
+				</div>
+
+				<h:commandButton action="#{eventoController.salvar}"
+					class="btn btn-primary mb-2" value="Salvar">
+					<f:ajax render="frmEvento" execute="frmEvento" />
+				</h:commandButton>
+
+				<h:commandButton rendered="#{eventoController.modoEdicao}"
+					action="#{eventoController.cancelar}" class="btn btn-warning"
+					value="Cancelar" style="margin-right:20px;">
+					<f:ajax render="frmEvento" />
+				</h:commandButton>
+
+			</div>
+
+		</div>
+
+		<!-- LISTA DE CONTEUDO -->
+		<div class="container">
+
+			<div class="shadow p-3 mb-5 bg-white rounded">
+
+				<div class="shadow-none p-3 mb-5 bg-light rounded">
+					<p class="text-success text-center text-wrap ">Lista de Eventos</p>
+				</div>
+
+				<h:commandButton action="${eventoController.listar()}" class="btn btn-primary mb-2" value="Listar Tudo" style="margin-right:20px;" update="dtEventos">
+					<f:ajax render="dtEventos" />
+				</h:commandButton> 
+				
+				<h:dataTable value="#{eventoController.eventos}" var="ev"
+					class="table" id="dtEventos">
+
+					<h:column headerClass="center">
+						<f:facet name="header">ID</f:facet>
+						<a class="text-info center">#{ev.id}</a>
+					</h:column>
+
+					<h:column headerClass="center">
+						<f:facet name="header">Evento</f:facet>
+						<a class="text-info "
+							title=" URL = #{ev.url} , EMAIL =  #{ev.nmEmail}">#{ev.nmEvento}</a>
+					</h:column>
+
+					<h:column headerClass="center">
+						<f:facet name="header">Tipo</f:facet>
+						<a class="text-info">#{ev.tipo}</a>
+					</h:column>
+
+					<h:column headerClass="center">
+						<f:facet name="header">Status</f:facet>
+						<a class="text-info">#{ev.nmStatus}</a>
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Dt Validacao" />
+						</f:facet>
+						<h:outputText value="#{ev.dataHora}" class="text-info">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+								timeZone="GMT-03:00" />
+						</h:outputText>
+					</h:column>
+
+					<h:column headerClass="center">
+						<f:facet name="header">Acao</f:facet>
+						<h:column headerClass="text-center">
+
+							<h:commandButton action="#{eventoController.excluir(ev)}"
+								class="btn btn-danger" value="Excluir"
+								style="margin-right:20px;"
+								onclick="return window.confirm('Deseja Excluir?')">
+								<f:ajax render="frmEvento:dtEventos" />
+							</h:commandButton>
+
+							<h:commandButton action="#{eventoController.editar(ev)}"
+								class="btn btn-warning" disabled="false" value="Editar"
+								style="margin-right:20px;">
+								<f:ajax render="frmEvento" />
+							</h:commandButton>
+
+							<h:commandButton action="#{eventoController.validarUrl(ev)}"
+								class="btn btn-info" value="Validar">
+								<f:ajax render="frmEvento" />
+							</h:commandButton>
+
+						</h:column>
+					</h:column>
+				</h:dataTable>
+			</div>
+		</div>
+
+	</h:form>
+</body>
+</html>
