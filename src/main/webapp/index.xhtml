@@ -27,6 +27,8 @@
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous">
 	 </script>
+
+	<script src="static/js/filter2.js"></script>
 </h:head>
 
 
@@ -58,32 +60,37 @@
 
 			<div class="shadow-lg p-3 mb-5 bg-white rounded">
 				<div class="shadow-none p-3 mb-5 bg-light rounded">
-					<p class="text-success text-center text-wrap">Cadastro de
-						Evento</p>
+					<p class="text-success text-center text-wrap">Cadastro de Evento</p>
 				</div>
 
+				 <p:messages id="msgs" />
+				
+	
 				<div class="form-group ">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="basic-addon3">Evento:</span>
 					</div>
 
 					<h:inputText value="#{eventoController.evento.nmEvento}"
-						class="form-control">
-						<f:passThroughAttribute name="placeholder"
-							value="Alarme - Nome do Alarme" />
+						id="firstrEvento"
+						class="form-control " type="email" required="true" requiredMessage="Evento é obrigátorio">
+						<f:passThroughAttribute name="placeholder"	value="Alarme - Nome do Alarme" />
 					</h:inputText>
+					<p:message for="firstrEvento" display="icon" />
 				</div>
 
 				<div class="form-group">
-					<div class="input-group-prepend">
+					<div class="input-group-prepend" >
 						<span class="input-group-text" id="basic-addon3">URL:</span>
 					</div>
 
 					<h:inputText value="#{eventoController.evento.url}"
-						class="form-control">
+						id="firstrUrl"
+						class="form-control" type="email"  required="true" requiredMessage="URL é obrigátorio">
 						<f:passThroughAttribute name="placeholder"
 							value="https://exemplo.com" />
 					</h:inputText>
+					<p:message for="firstrUrl" display="icon" />
 				</div>
 
 				<div class="form-group">
@@ -92,10 +99,12 @@
 					</div>
 
 					<h:inputText value="#{eventoController.evento.nmEmail}"
-						type="email" class="form-control">
+						id="firstrEmail"
+						type="email" class="form-control" required="true" requiredMessage="Email é obrigátorio">
 						<f:passThroughAttribute name="placeholder"
 							value="nome@email.com.br" />
 					</h:inputText>
+					<p:message for="firstrEmail" display="icon" />
 				</div>
 
 				<div class="form-group">
@@ -103,12 +112,13 @@
 						<span class="input-group-text " id="basic-addon3">Tipo:</span>
 					</div>
 					<h:panelGrid columns="1" style="margin-bottom:15px" cellpadding="5">
-						<p:selectOneRadio id="console"
-							value="#{eventoController.evento.tipo}"
-							style="vertical-align: middle;" unselectable="true">
+					
+						<p:selectOneRadio id="console" value="#{eventoController.evento.tipo}" style="vertical-align: middle;" unselectable="true" 
+										  required="true" requiredMessage="Precisa ter um Tipo">
 							<f:selectItem itemValue="PROD" itemLabel="Producao" />
 							<f:selectItem itemValue="DEV" itemLabel="Desenvolvimento" />
 						</p:selectOneRadio>
+						
 					</h:panelGrid>
 
 					<!-- <h:selectOneMenu value="#{eventoController.evento.tipo}">
@@ -132,6 +142,7 @@
 			</div>
 
 		</div>
+		
 
 		<!-- LISTA DE CONTEUDO -->
 		<div class="container">
@@ -141,11 +152,21 @@
 				<div class="shadow-none p-3 mb-5 bg-light rounded">
 					<p class="text-success text-center text-wrap ">Lista de Eventos</p>
 				</div>
-
-				<h:commandButton action="${eventoController.listar()}" class="btn btn-primary mb-2" value="Listar Tudo" style="margin-right:20px;" update="dtEventos">
-					<f:ajax render="dtEventos" />
-				</h:commandButton> 
 				
+				
+				<!-- <div class="spinner-border text-primary" role="status">
+					<span class="sr-only">Loading...</span>
+				</div> -->
+
+				<h:commandButton action="${eventoController.listar()}"
+					class="btn btn-primary mb-2 " value="Validar Tudo"
+					style="margin-right:20px;" update="dtEventos" id="validar">
+					<f:ajax render="frmEvento:dtEventos" />
+				</h:commandButton>
+				
+							
+				
+
 				<h:dataTable value="#{eventoController.eventos}" var="ev"
 					class="table" id="dtEventos">
 

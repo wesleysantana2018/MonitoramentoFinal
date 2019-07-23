@@ -1,12 +1,15 @@
 package br.com.ebix.monitoramento.controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +32,6 @@ public class EventoController {
 
 	private List<Evento> eventos;
 
-	private List<Evento> eventos2;
-
 	private boolean modoEdicao = false;
 
 	private boolean modoValidar = false;
@@ -49,6 +50,7 @@ public class EventoController {
 		evento.setNmStatus(EventoService.getStatus(url));
 		evento.setDataHora(date);
 		eventoRepository.save(evento); // COLOCAMOS NO BANCO
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cadastro inserido"));
 		if (!modoEdicao)
 			eventos.add(evento); // COLOCAMOS NA LISTA
 		evento = new Evento();
@@ -82,15 +84,23 @@ public class EventoController {
 		eventoRepository.save(evento);
 	}
 	
-
+	//METODO PARA RESTAURA INFORMACAO NA TELA
+	public void refresh() {  
+        FacesContext context = FacesContext.getCurrentInstance();  
+        Application application = context.getApplication();  
+        ViewHandler viewHandler = application.getViewHandler();  
+        UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());  
+        context.setViewRoot(viewRoot);  
+        context.renderResponse();  
+    } 
+	
 	// METODO LISTAR TUDO
 	public void listar() throws Exception {
+		eventos = eventoRepository.buscarTodos();
 		
-		eventos = eventoRepository.buscarTodos();		
-		Date date = new Date();
-
 		for (int i = 0; i < eventos.size(); i++) {
 			Evento ev = eventos.get(i);
+			Date date = new Date();
 				
 			evento.setNmStatus(eventoService.getStatus(ev.getUrl()));
 			evento.setUrl(ev.getUrl());
@@ -99,12 +109,10 @@ public class EventoController {
 			evento.setId(ev.getId());
 			evento.setNmEmail(ev.getNmEmail());
 			evento.setTipo(ev.getTipo());
+			eventoRepository.save(evento);		
 			
-			System.out.println("-ID- " + evento.getId()  + "-EVENTO - " +  evento.getNmEvento() + " -TIPO - " +  evento.getTipo()  + " -EMAIL - " + evento.getNmEmail() 
-			+ " -STATUS - " + evento.getNmStatus()  + " -DATA-HORA - " + evento.getDataHora() + " - URL - " + evento.getUrl());
-
 		}
-			System.out.println("Task completed...");
+		this.refresh();
 	}
 
 	// GET E SET
